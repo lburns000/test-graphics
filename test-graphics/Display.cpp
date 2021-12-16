@@ -61,15 +61,10 @@ void Display::drawPixel(int x, int y, int value)
 
 void Display::drawLine(int x1, int y1, int x2, int y2, int value) {
 
+	//TODO: Use Bresenham's Algorithm to make this cheaper
+
 	int dx = x2 - x1;
 	int dy = y2 - y1;
-
-	/*// Use Bresenham's Line Algorithm
-	int A = 2 * dy;
-	int B = A - (2 * dx);
-	int P = A - dx;
-	int yLast = y1;*/
-
 	double m = static_cast<double>(dy) / static_cast<double>(dx);
 
 	drawPixel(x1, y1, value);	// Draw start pixel
