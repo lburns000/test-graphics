@@ -26,11 +26,11 @@ int main() {
 	myDisp.fill();
 	myDisp.update();
 
-	int x1, y1, x2, y2;
+	int x1, y1, r;
 	myDisp.clear();
-	cout << "Enter x1 y1 x2 y2: ";
-	cin >> x1 >> y1 >> x2 >> y2;
-	myDisp.drawLine(x1,y1,x2,y2,1);
+	cout << "Enter x1 y1 r: ";
+	cin >> x1 >> y1 >> r;
+	myDisp.drawCircle(x1,y1,r,1);
 	myDisp.update();
 
 	return 0;

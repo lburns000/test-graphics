@@ -19,6 +19,7 @@ public:
 	void drawPixel(int x, int y, int value);
 	void drawLine(int x1, int y1, int x2, int y2, int value);
 	void drawRectangle(int x1, int y1, int x2, int y2, int value);
+	void drawCircle(int xc, int yc, int r, int value);
 	void clear();
 	void fill();
 	void update();
