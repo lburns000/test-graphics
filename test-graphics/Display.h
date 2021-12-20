@@ -8,6 +8,7 @@
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 
+//TODO: Replace this with dynamically allocated array during object initialization
 #define WIDTH 40
 #define HEIGHT 40
 

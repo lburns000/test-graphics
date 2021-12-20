@@ -10,6 +10,12 @@
 #include <string>
 #include <cmath>
 
+void swap(int& a, int& b) {
+	int temp = a;
+	a = b;
+	b = temp;
+}
+
 Display::Display() {
 	//Initialize screen
 	clear();
@@ -61,46 +67,88 @@ void Display::drawPixel(int x, int y, int value)
 
 void Display::drawLine(int x1, int y1, int x2, int y2, int value) {
 
-	//TODO: Use Bresenham's Algorithm to make this cheaper
+	//TODO: Add functionality for slope > 1 and reverse entry
 
-	int dx = x2 - x1;
-	int dy = y2 - y1;
-	double m = static_cast<double>(dy) / static_cast<double>(dx);
+	int x, y, dx, dy;
 
-	drawPixel(x1, y1, value);	// Draw start pixel
+	// Constrain x1
+	if (x1 < 0) {x1 = 0;}
+	if (x1 > WIDTH - 1) {x1 = WIDTH - 1;}
+	// Constrain y1
+	if (y1 < 0) {y1 = 0;}
+	if (y1 > HEIGHT - 1) {y1 = HEIGHT - 1;}
+	// Constrain x2
+	if (x2 < 0) {x2 = 0;}
+	if (x2 > WIDTH - 1) {x2 = WIDTH - 1;}
+	// Constrain y2
+	if (y2 < 0) {y2 = 0;}
+	if (y2 > HEIGHT - 1) {y2 = HEIGHT - 1;}
 
-	int x = x1 + 1;
+	// Make sure x1 <= x2
+	if (x1 > x2) {
+		swap (x1, x2);
+		swap (y1, y2);
+	}
 
-	while (x <= x2) {
-		double yd = round(m * (x - x1) + y1);
-		int y = yd;
-		drawPixel(x, yd, 1);
-		std::cout << "At x = " << x << ", y calculated to be: " << y << std::endl;
-		std::cout << "Drawing pixel at: (" << x << ", " << y << ")\n\n";
-		x++;
+
+	x = x1;
+	y = y1;
+	dx = x2 - x1;
+	dy = y2 - y1;
+
+	// If slope <= 1, find y values for each x
+	if (dx >= dy) {
+		int A = dy << 1; // Multiply dy by 2
+		int B = dx << 1; // Multiply dx by 2
+		int C = A - B;
+		int P = A - dx;
+
+		drawPixel(x, y, value); // Draw start pixel
+
+		while (x < x2) {
+			if (P < 0) {
+				drawPixel(x+1, y, value);
+				P += A;
+			}
+			else {
+				drawPixel(x+1, y+1, value);
+				y++;
+				P += C;
+			}
+
+			x++;
+		}
+	}
+	// If slope > 1, find x values for each y
+	else {
+		int A = dx << 1; // Multiply dx by 2
+		int B = dy << 1; // Multiply dy by 2
+		int C = A - B;
+		int P = A - dy;
+
+		drawPixel(x, y, value); // Draw start pixel
+
+		while (y < y2) {
+			if (P < 0) {
+				drawPixel(x, y+1, value);
+				P += A;
+			}
+			else {
+				drawPixel(x+1, y+1, value);
+				x++;
+				P += C;
+			}
+
+			y++;
+		}
 	}
 }
 
 void Display::drawRectangle(int x1, int y1, int x2, int y2, int value) {
-	int colDiff = x2 - x1;
-	int rowDiff = y2 - y1;
 
-	for (int row = 0; row < HEIGHT; row++) {
-		for (int col = 0; col < WIDTH; col++) {
-
-			// Draw the top and bottom
-			if ((y1 == row) || (y2 == row)) {
-				for (int i = x1; i <= x2; i++) {
-					buffer[row][i] = value;
-				}
-			}
-
-			// Draw the sides
-			if (y1 < row && y2 > row) {
-				buffer[row][x1] = value;
-				buffer[row][x2] = value;
-			}
-		}
-	}
+	drawLine(x1, y1, x2, y1, 1); // Draw the top
+	drawLine(x1, y1, x1, y2, 1); // Draw the left side
+	drawLine(x1, y2, x2, y2, 1); // Draw the bottom
+	drawLine(x2, y1, x2, y2, 1); // Draw the right side
 }
 
