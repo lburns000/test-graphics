@@ -67,8 +67,6 @@ void Display::drawPixel(int x, int y, int value)
 
 void Display::drawLine(int x1, int y1, int x2, int y2, int value) {
 
-	//TODO: Add functionality for slope > 1 and reverse entry
-
 	int x, y, dx, dy;
 
 	// Constrain x1
