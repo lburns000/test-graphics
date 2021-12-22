@@ -8,7 +8,6 @@
 #include "Display.h"
 #include <iostream>
 #include <string>
-#include <cmath>
 
 void swap(int& a, int& b) {
 	int temp = a;
